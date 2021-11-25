@@ -1,3 +1,4 @@
+const url = require('url');
 const express = require('express');
 const router = express.Router();
 const needle = require('needle');
@@ -12,10 +13,16 @@ router.get('/', async (req, res, next) => {
   try {
     const params = new URLSearchParams({
       [URL_KEY_NAME]: API_KEY_VALUE,
+      ...url.parse(req.url, true).query,
     });
 
     const apiResponse = await needle('get', `${API_BASE_URL}?${params}`);
     const data = apiResponse.body;
+
+    //Log the request to the public API
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`REQUEST: ${API_BASE_URL}?${params}`);
+    }
 
     res.status(200).json(data);
   } catch (error) {
