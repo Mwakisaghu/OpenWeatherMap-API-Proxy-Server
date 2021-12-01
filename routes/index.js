@@ -12,7 +12,7 @@ const API_KEY_VALUE = process.env.API_KEY_VALUE;
 router.get('/', async (req, res, next) => {
   try {
     const params = new URLSearchParams({
-      [URL_KEY_NAME]: API_KEY_VALUE,
+      [API_KEY_NAME]: API_KEY_VALUE,
       ...url.parse(req.url, true).query,
     });
 
@@ -26,7 +26,7 @@ router.get('/', async (req, res, next) => {
 
     res.status(200).json(data);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error });
   }
 });
 
